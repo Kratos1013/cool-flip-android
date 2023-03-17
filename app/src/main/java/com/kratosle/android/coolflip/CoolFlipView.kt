@@ -21,7 +21,6 @@ class CoolFlipView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
 ) : FrameLayout(context, attrs) {
-    private val TAG = "CoolFlipView"
     private lateinit var frontView: View
     private lateinit var backView: View
     var flipListener: FlipListener? = null
