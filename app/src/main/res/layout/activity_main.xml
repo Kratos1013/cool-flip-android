@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+    <com.kratosle.android.coolflip.CoolFlipView
+        android:id="@+id/flipper"
+        android:background="#1AFFFFFF"
+        android:layout_width="match_parent"
+        android:layout_height="300dp" >
+        <TextView
+            android:id="@+id/front"
+            android:text="Front side"
+            android:gravity="center"
+            android:background="#1ACA1010"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+        <TextView
+            android:id="@+id/back"
+            android:text="Back side"
+            android:background="#1A10CA38"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+    </com.kratosle.android.coolflip.CoolFlipView>
+
+    <Button
+        android:id="@+id/flipTheCard"
+        android:text="Flip the card"
+        android:layout_width="match_parent"
+        android:layout_height="50dp" />
+
+    <SeekBar
+        android:id="@+id/seek"
+        android:max="180"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"/>
+
+</LinearLayout>
