@@ -6,7 +6,7 @@
     android:orientation="vertical"
     android:layout_height="match_parent"
     tools:context=".MainActivity">
-    <com.kratosle.android.coolflip.CoolFlipView
+    <com.kratosle.android.coolfip.CoolFlipView
         android:id="@+id/flipper"
         android:background="#1AFFFFFF"
         android:layout_width="match_parent"
@@ -25,7 +25,7 @@
             android:gravity="center"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
-    </com.kratosle.android.coolflip.CoolFlipView>
+    </com.kratosle.android.coolfip.CoolFlipView>
 
     <Button
         android:id="@+id/flipTheCard"

@@ -1,4 +1,4 @@
-package com.kratosle.android.coolflip
+package com.kratosle.android.coolflipapp
 
 import org.junit.Test
 

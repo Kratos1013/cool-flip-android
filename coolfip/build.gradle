@@ -1,0 +1,124 @@
+import org.gradle.api.tasks.bundling.Jar
+
+plugins {
+    id 'com.android.library'
+    id 'org.jetbrains.kotlin.android'
+    id 'maven-publish'
+
+}
+
+android {
+    compileSdk 33
+
+    defaultConfig {
+        minSdk 24
+        targetSdk 33
+        versionName "0.0.1"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles "consumer-rules.pro"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+}
+
+dependencies {
+
+    implementation 'androidx.core:core-ktx:1.7.0'
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'com.google.android.material:material:1.8.0'
+    testImplementation 'junit:junit:4.13.2'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+}
+
+ext {
+    isRelease = project.hasProperty('release')
+}
+def isAndroidLibrary = project.extensions.findByName('android') != null
+
+def sourcesJar(){
+   return tasks.registering(Jar::class) {
+        classifier = "sources"
+        from(sourceSets.main.get().allSource)
+    }
+}
+
+def getReleaseRepositoryUrl() {
+    return hasProperty('RELEASE_REPOSITORY_URL') ? RELEASE_REPOSITORY_URL
+            : "https://maven.pkg.github.com/Kratos1013/cool-flip-android"
+}
+
+def getRepositoryUsername() {
+    return project.findProperty("gpr.usr") ?: System.getenv("GPR_USER")
+}
+
+def getRepositoryPassword() {
+    return project.findProperty("gpr.key") ?: System.getenv("GPR_API_KEY")
+}
+afterEvaluate {
+    publishing {
+        publications {
+            release(MavenPublication) {
+                from isAndroidLibrary ? components.release : components.java
+                groupId GROUP
+                artifactId POM_ARTIFACT_ID
+                version '0.1'
+                afterEvaluate {
+                    artifact sourcesJar
+                }
+                pom {
+                    name = POM_NAME
+                    packaging = POM_PACKAGING
+                    description = POM_DESCRIPTION
+                    url = POM_URL
+                    scm {
+                        url = POM_SCM_URL
+                        connection = POM_SCM_CONNECTION
+                        developerConnection = POM_SCM_DEV_CONNECTION
+                    }
+                    licenses {
+                        license {
+                            name = POM_LICENCE_NAME
+                            url = POM_LICENCE_URL
+                            distribution = POM_LICENCE_DIST
+                        }
+                    }
+                    developers {
+                        developer {
+                            id = POM_DEVELOPER_ID
+                            name = POM_DEVELOPER_NAME
+                        }
+                    }
+                }
+            }
+        }
+        repositories {
+            maven {
+                url getReleaseRepositoryUrl()
+                credentials {
+                    username = getRepositoryUsername()
+                    password = getRepositoryPassword()
+                }
+            }
+        }
+    }
+
+
+    task sourcesJar(type: Jar) {
+        archiveClassifier.set("sources")
+        from isAndroidLibrary ? android.sourceSets.main.java.srcDirs : sourceSets.main.allSource
+    }
+
+}

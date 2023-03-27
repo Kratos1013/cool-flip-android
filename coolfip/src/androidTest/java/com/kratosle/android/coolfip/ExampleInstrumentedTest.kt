@@ -1,4 +1,4 @@
-package com.kratosle.android.coolflip
+package com.kratosle.android.coolfip
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -19,6 +19,6 @@ class ExampleInstrumentedTest {
     fun useAppContext() {
         // Context of the app under test.
         val appContext = InstrumentationRegistry.getInstrumentation().targetContext
-        assertEquals("com.kratosle.android.coolflip", appContext.packageName)
+        assertEquals("com.kratosle.android.coolfip.test", appContext.packageName)
     }
 }
