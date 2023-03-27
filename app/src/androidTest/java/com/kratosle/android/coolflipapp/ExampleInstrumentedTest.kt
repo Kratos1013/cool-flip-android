@@ -1,4 +1,4 @@
-package com.kratosle.android.coolflip
+package com.kratosle.android.coolflipapp
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4

@@ -1,10 +1,9 @@
-package com.kratosle.android.coolflip
+package com.kratosle.android.coolfip
 
 import android.animation.ValueAnimator
 import android.content.Context
 import android.graphics.Canvas
 import android.util.AttributeSet
-import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout

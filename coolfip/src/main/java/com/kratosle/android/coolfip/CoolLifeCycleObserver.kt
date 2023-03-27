@@ -1,4 +1,4 @@
-package com.kratosle.android.coolflip
+package com.kratosle.android.coolfip
 
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner

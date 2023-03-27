@@ -1,4 +1,4 @@
-package com.kratosle.android.coolflip
+package com.kratosle.android.coolflipapp
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -6,12 +6,12 @@ import android.util.Log
 import android.widget.Button
 import android.widget.SeekBar
 
-class MainActivity : AppCompatActivity(), FlipListener {
+class MainActivity : AppCompatActivity(), com.kratosle.android.coolfip.FlipListener {
     private val TAG = "MainActivity"
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        val flipper = findViewById<CoolFlipView>(R.id.flipper)
+        val flipper = findViewById<com.kratosle.android.coolfip.CoolFlipView>(R.id.flipper)
         val button = findViewById<Button>(R.id.flipTheCard)
         button.setOnClickListener {
             flipper.flip()
@@ -31,7 +31,7 @@ class MainActivity : AppCompatActivity(), FlipListener {
         flipper.flipListener = this
     }
 
-    override fun onFlipStateChanged(state: FlipState, degree: Float) {
+    override fun onFlipStateChanged(state: com.kratosle.android.coolfip.FlipState, degree: Float) {
         Log.i(TAG, "state: $state  degree:$degree")
     }
 }
