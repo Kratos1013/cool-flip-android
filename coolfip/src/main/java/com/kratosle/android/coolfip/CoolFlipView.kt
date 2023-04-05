@@ -1,13 +1,17 @@
 package com.kratosle.android.coolfip
 
 import android.animation.ValueAnimator
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Canvas
 import android.util.AttributeSet
+import android.view.HapticFeedbackConstants
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import androidx.lifecycle.MutableLiveData
+import kotlin.math.abs
 
 
 //
@@ -70,10 +74,11 @@ class CoolFlipView @JvmOverloads constructor(
     }
 
     fun flip() {
-        val va = ValueAnimator.ofFloat(lastPr, if (currentFlipState == FlipState.Front) 180f else 0f)
+        val va =
+            ValueAnimator.ofFloat(lastPr, if (currentFlipState == FlipState.Front) 180f else 0f)
         va.duration = 1000
         va.addUpdateListener {
-            flipDegree.postValue((it.animatedValue as Float).coerceIn(-360f, 360f))
+            flipDegree.postValue((it.animatedValue as Float).coerceIn(-180f, 180f))
         }
         va.start()
     }
@@ -106,8 +111,8 @@ class CoolFlipView @JvmOverloads constructor(
     }
 
     private fun Float.toFlipState() = when (this) {
-        in 0f..89f -> FlipState.Front
-        in 90f..180f -> FlipState.Back
+        0f, 89f -> FlipState.Front
+        90f, 180f -> FlipState.Back
         else -> {
             FlipState.Front
         }
@@ -123,4 +128,35 @@ class CoolFlipView @JvmOverloads constructor(
         lifeCycleObserver.onDestroy()
     }
 
+    @SuppressLint("ClickableViewAccessibility")
+    fun addGestureDetector(view: View) {
+        var startY = 0f;
+        var progress = 0f
+        view.setOnTouchListener { v, event ->
+            when (event.action) {
+                MotionEvent.ACTION_DOWN -> {
+                    startY = event.rawY
+                }
+                MotionEvent.ACTION_MOVE -> {
+                    val movedY = 180f - abs(event.rawY - startY)
+                    progress = movedY.coerceIn(0f, 180f)
+                    flip(progress)
+                }
+                MotionEvent.ACTION_UP -> {
+                    if (progress == 90f){
+                        view.performHapticFeedback(HapticFeedbackConstants.CLOCK_TICK)
+                    }
+                    when (progress) {
+                        in 0f..90f -> {
+                            flip(0f)
+                        }
+                        in 90f..180f -> {
+                            flip(180f)
+                        }
+                    }
+                }
+            }
+            true
+        }
+    }
 }

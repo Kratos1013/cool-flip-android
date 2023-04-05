@@ -74,7 +74,7 @@ afterEvaluate {
                 from isAndroidLibrary ? components.release : components.java
                 groupId GROUP
                 artifactId POM_ARTIFACT_ID
-                version '0.1'
+                version '0.4-SNAPSHOT'
                 afterEvaluate {
                     artifact sourcesJar
                 }
