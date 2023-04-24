@@ -3,7 +3,9 @@ package com.kratosle.android.coolflipapp
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.Button
+import android.widget.LinearLayout
 import android.widget.SeekBar
 
 class MainActivity : AppCompatActivity(), com.kratosle.android.coolfip.FlipListener {
@@ -13,9 +15,11 @@ class MainActivity : AppCompatActivity(), com.kratosle.android.coolfip.FlipListe
         setContentView(R.layout.activity_main)
         val flipper = findViewById<com.kratosle.android.coolfip.CoolFlipView>(R.id.flipper)
         val button = findViewById<Button>(R.id.flipTheCard)
+        val gesture = findViewById<LinearLayout>(R.id.gesture)
         button.setOnClickListener {
             flipper.flip()
         }
+        flipper.addGestureDetector(gesture)
         val seekbar = findViewById<SeekBar>(R.id.seek)
         seekbar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener{
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {

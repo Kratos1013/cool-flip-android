@@ -5,6 +5,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Canvas
 import android.util.AttributeSet
+import android.util.Log
 import android.view.HapticFeedbackConstants
 import android.view.MotionEvent
 import android.view.View
@@ -24,13 +25,14 @@ class CoolFlipView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
 ) : FrameLayout(context, attrs) {
+    val TAG = "CoolFlipView"
+
     private lateinit var frontView: View
     private lateinit var backView: View
     var flipListener: FlipListener? = null
     private var currentFlipState: FlipState = FlipState.Front
     private var flipDegree = MutableLiveData(0f) // 0f <= val <= 180f
     private val lifeCycleObserver = CoolLifeCycleObserver()
-
     init {
         initProgressListener()
 
@@ -74,17 +76,23 @@ class CoolFlipView @JvmOverloads constructor(
     }
 
     fun flip() {
+        val toDegree = if (currentFlipState == FlipState.Front) 180f else 0f
         val va =
-            ValueAnimator.ofFloat(lastPr, if (currentFlipState == FlipState.Front) 180f else 0f)
+            ValueAnimator.ofFloat(lastPr, toDegree)
         va.duration = 1000
+        Log.i(TAG, "fullFlip, $lastPr $toDegree")
+
         va.addUpdateListener {
-            flipDegree.postValue((it.animatedValue as Float).coerceIn(-180f, 180f))
+            val rotate = (it.animatedValue as Float).coerceIn(-180f, 180f)
+            Log.i(TAG, "postDegree $rotate, $lastPr $toDegree")
+            flipDegree.postValue(rotate)
         }
         va.start()
     }
 
     private var lastPr = 0f
     fun flip(progress: Float) {
+        Log.i(TAG, "progress $progress")
         flipDegree.postValue(progress)
     }
 
@@ -111,8 +119,8 @@ class CoolFlipView @JvmOverloads constructor(
     }
 
     private fun Float.toFlipState() = when (this) {
-        0f, 89f -> FlipState.Front
-        90f, 180f -> FlipState.Back
+        in 0f..90f -> FlipState.Front
+        in 91f..180f -> FlipState.Back
         else -> {
             FlipState.Front
         }
@@ -128,6 +136,9 @@ class CoolFlipView @JvmOverloads constructor(
         lifeCycleObserver.onDestroy()
     }
 
+
+    public var gestureSensitivity: Float = 1f
+
     @SuppressLint("ClickableViewAccessibility")
     fun addGestureDetector(view: View) {
         var startY = 0f;
@@ -138,14 +149,12 @@ class CoolFlipView @JvmOverloads constructor(
                     startY = event.rawY
                 }
                 MotionEvent.ACTION_MOVE -> {
-                    val movedY = 180f - abs(event.rawY - startY)
+                    val movedY = (180f - abs((event.rawY - startY)*gestureSensitivity))
+                    Log.e(TAG, movedY.toString())
                     progress = movedY.coerceIn(0f, 180f)
                     flip(progress)
                 }
                 MotionEvent.ACTION_UP -> {
-                    if (progress == 90f){
-                        view.performHapticFeedback(HapticFeedbackConstants.CLOCK_TICK)
-                    }
                     when (progress) {
                         in 0f..90f -> {
                             flip(0f)

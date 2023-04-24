@@ -39,4 +39,18 @@
         android:layout_width="match_parent"
         android:layout_height="50dp"/>
 
+    <LinearLayout
+        android:orientation="vertical"
+        android:id="@+id/gesture"
+        android:background="#4DFF9A00"
+        android:layout_width="match_parent"
+        android:layout_height="350dp">
+        <TextView
+            android:text="Swipe"
+            android:gravity="center"
+            android:background="#1ABC2020"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+    </LinearLayout>
+
 </LinearLayout>
